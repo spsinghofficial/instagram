@@ -4,7 +4,7 @@
 //
 //  Created by surinder pal singh sidhu on 2020-02-21.
 //  Copyright © 2020 surinder. All rights reserved.
-//
+
 
 import UIKit
 
@@ -56,7 +56,7 @@ class LoginVC: UIViewController {
           
           let attributedTitle = NSMutableAttributedString(string: "Don't have an account?  ", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.lightGray])
           attributedTitle.append(NSAttributedString(string: "Sign Up", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)]))
-          //button.addTarget(self, action: #selector(handleShowSignUp), for: .touchUpInside)
+          button.addTarget(self, action: #selector(handleShowSignUp), for: .touchUpInside)
           button.setAttributedTitle(attributedTitle, for: .normal)
           
           return button
@@ -64,6 +64,8 @@ class LoginVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        //HIDE NAV BAR
+        navigationController?.navigationBar.isHidden = true
         view.addSubview(logoContainerView)
            logoContainerView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 150)
 
@@ -85,5 +87,13 @@ class LoginVC: UIViewController {
                view.addSubview(stackView)
                stackView.anchor(top: logoContainerView.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 40, paddingLeft: 40, paddingBottom: 0, paddingRight: 40, width: 0, height: 140)
       }
+    
+    // MARK: - Handlers
+    
+    @objc func handleShowSignUp() {
+        print("signup vc called")
+        let signUpVC = SignupVC()
+        navigationController?.pushViewController(signUpVC, animated: true)
+    }
 
 }
