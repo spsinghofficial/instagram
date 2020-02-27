@@ -9,12 +9,15 @@
 import UIKit
 import Firebase
 
-class SignupVC: UIViewController {
+class SignupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    // MARK: - Properties
+      
+      var imageSelected = false
     
     let plusPhotoBtn: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "plus_photo").withRenderingMode(.alwaysOriginal), for: .normal)
-       // button.addTarget(self, action: #selector(handleSelectProfilePhoto), for: .touchUpInside)
+       button.addTarget(self, action: #selector(handleSelectProfilePhoto), for: .touchUpInside)
         return button
     }()
     
@@ -95,6 +98,30 @@ class SignupVC: UIViewController {
           alreadyHaveAccountButton.anchor(top: nil, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingBottom: 0, paddingRight: 0, width: 0, height: 50)
 
     }
+    
+    // MARK: - UIImagePickerController
+    
+    /// function that handles selecting image from camera roll
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        // selected image
+        guard let profileImage = info[.editedImage] as? UIImage else {
+            imageSelected = false
+            return
+        }
+        
+        // set imageSelected to true
+        imageSelected = true
+        
+        // configure plusPhotoBtn with selected image
+        plusPhotoBtn.layer.cornerRadius = plusPhotoBtn.frame.width / 2
+        plusPhotoBtn.layer.masksToBounds = true
+        plusPhotoBtn.layer.borderColor = UIColor.black.cgColor
+        plusPhotoBtn.layer.borderWidth = 2
+        plusPhotoBtn.setImage(profileImage.withRenderingMode(.alwaysOriginal), for: .normal)
+        
+        self.dismiss(animated: true, completion: nil)
+    }
     @objc func handleShowLogin() {
          _ = navigationController?.popViewController(animated: true)
      }
@@ -109,6 +136,19 @@ class SignupVC: UIViewController {
         
         view.addSubview(stackView)
         stackView.anchor(top: plusPhotoBtn.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 24, paddingLeft: 40, paddingBottom: 0, paddingRight: 40, width: 0, height: 240)
+    }
+    // MARK: - Handlers
+    
+    @objc func handleSelectProfilePhoto() {
+        
+        // configure image picker
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
+        
+        // present image picker
+        self.present(imagePicker, animated: true, completion: nil)
+        
     }
     
     @objc func formValidation() {
