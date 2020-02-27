@@ -157,8 +157,8 @@ class SignupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
               emailTextField.hasText,
               passwordTextField.hasText,
               fullNameTextField.hasText,
-              usernameTextField.hasText
-             // imageSelected == true
+              usernameTextField.hasText,
+              imageSelected == true
         else {
             self.signUpButton.isEnabled = false
                   signUpButton.backgroundColor = UIColor(red: 149/255, green: 204/255, blue: 244/255, alpha: 1)
@@ -187,44 +187,46 @@ class SignupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
             else {
                 print("user created")
             }
-//
-//            guard let profileImg = self.plusPhotoBtn.imageView?.image else { return }
-//            guard let uploadData = profileImg.jpegData(compressionQuality: 0.3) else { return }
-//
-//            let filename = NSUUID().uuidString
-//
-//            // UPDATE: - In order to get download URL must add filename to storage ref like this
-//            let storageRef = Storage.storage().reference().child("profile_images").child(filename)
-//
-//            storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
-//
-//                // handle error
-//                if let error = error {
-//                    print("Failed to upload image to Firebase Storage with error", error.localizedDescription)
-//                    return
-//                }
-//
-//                // UPDATE: - Firebase 5 must now retrieve download url
-//                storageRef.downloadURL(completion: { (downloadURL, error) in
-//                    guard let profileImageUrl = downloadURL?.absoluteString else {
-//                        print("DEBUG: Profile image url is nil")
-//                        return
-//                    }
-//
-//                    // user id
-//                    guard let uid = authResult?.user.uid else { return }
-//                    guard let fcmToken = Messaging.messaging().fcmToken else { return }
-//
-//                    let dictionaryValues = ["name": fullName,
-//                                            "fcmToken": fcmToken,
-//                                            "username": username,
-//                                            "profileImageUrl": profileImageUrl]
-//
-//                    let values = [uid: dictionaryValues]
-//
-//                    // save user info to database
-//                    USER_REF.updateChildValues(values, withCompletionBlock: { (error, ref) in
-//
+
+            guard let profileImg = self.plusPhotoBtn.imageView?.image else { return }
+            guard let uploadData = profileImg.jpegData(compressionQuality: 0.3) else { return }
+
+            let filename = NSUUID().uuidString
+
+            // UPDATE: - In order to get download URL must add filename to storage ref like this
+            let storageRef = Storage.storage().reference().child("profile_images").child(filename)
+
+            storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
+
+                // handle error
+                if let error = error {
+                    print("Failed to upload image to Firebase Storage with error", error.localizedDescription)
+                    return
+                }
+
+                // UPDATE: - Firebase 5 must now retrieve download url
+                storageRef.downloadURL(completion: { (downloadURL, error) in
+                    guard let profileImageUrl = downloadURL?.absoluteString else {
+                        print("DEBUG: Profile image url is nil")
+                        return
+                    }
+
+                    // user id
+                
+                    guard let uid = authResult?.user.uid else { return }
+                   // guard let fcmToken = Messaging.messaging().fcmToken else { return }
+
+                    let dictionaryValues = ["name": fullName,
+                                    
+                                            "username": username,
+                                            "profileImageUrl": profileImageUrl]
+
+                    let values = [uid: dictionaryValues]
+
+                    // save user info to database
+                    Database.database().reference().child("users")
+                        .updateChildValues(values, withCompletionBlock: { (error, ref) in
+
 //                        guard let mainTabVC = UIApplication.shared.keyWindow?.rootViewController as? MainTabVC else { return }
 //
 //                        // configure view controllers in maintabvc
@@ -233,9 +235,12 @@ class SignupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
 //
 //                        // dismiss login controller
 //                        self.dismiss(animated: true, completion: nil)
-//                    })
-//                })
-//            })
+                            if error != nil {
+                                print("error storing data\(error?.localizedDescription)")
+                            }
+                    })
+                })
+            })
     }
             
         }
