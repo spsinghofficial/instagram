@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class SignupVC: UIViewController {
     
@@ -23,7 +24,7 @@ class SignupVC: UIViewController {
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.font = UIFont.systemFont(ofSize: 14)
-       // tf.addTarget(self, action: #selector(formValidation), for: .editingChanged)
+       tf.addTarget(self, action: #selector(formValidation), for: .editingChanged)
         return tf
     }()
     
@@ -34,7 +35,7 @@ class SignupVC: UIViewController {
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.font = UIFont.systemFont(ofSize: 14)
-       // tf.addTarget(self, action: #selector(formValidation), for: .editingChanged)
+        tf.addTarget(self, action: #selector(formValidation), for: .editingChanged)
         return tf
     }()
     
@@ -44,7 +45,7 @@ class SignupVC: UIViewController {
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.font = UIFont.systemFont(ofSize: 14)
-      //  tf.addTarget(self, action: #selector(formValidation), for: .editingChanged)
+       tf.addTarget(self, action: #selector(formValidation), for: .editingChanged)
         return tf
     }()
     
@@ -54,7 +55,7 @@ class SignupVC: UIViewController {
         tf.backgroundColor = UIColor(white: 0, alpha: 0.03)
         tf.borderStyle = .roundedRect
         tf.font = UIFont.systemFont(ofSize: 14)
-        //tf.addTarget(self, action: #selector(formValidation), for: .editingChanged)
+        tf.addTarget(self, action: #selector(formValidation), for: .editingChanged)
         return tf
     }()
     
@@ -65,7 +66,7 @@ class SignupVC: UIViewController {
         button.backgroundColor = UIColor(red: 149/255, green: 204/255, blue: 244/255, alpha: 1)
         button.layer.cornerRadius = 5
         button.isEnabled = false
-      //  button.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
         return button
     }()
     
@@ -109,6 +110,95 @@ class SignupVC: UIViewController {
         view.addSubview(stackView)
         stackView.anchor(top: plusPhotoBtn.bottomAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 24, paddingLeft: 40, paddingBottom: 0, paddingRight: 40, width: 0, height: 240)
     }
+    
+    @objc func formValidation() {
+          
+          guard
+              emailTextField.hasText,
+              passwordTextField.hasText,
+              fullNameTextField.hasText,
+              usernameTextField.hasText
+             // imageSelected == true
+        else {
+            self.signUpButton.isEnabled = false
+                  signUpButton.backgroundColor = UIColor(red: 149/255, green: 204/255, blue: 244/255, alpha: 1)
+                  return
+          }
+          
+          signUpButton.isEnabled = true
+          signUpButton.backgroundColor = UIColor(red: 17/255, green: 154/255, blue: 237/255, alpha: 1)
+      }
+    
+    @objc func handleSignUp() {
+       
+        // properties
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        guard let fullName = fullNameTextField.text else { return }
+        guard let username = usernameTextField.text?.lowercased() else { return }
+        
+        Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
+            
+            // handle error
+            if let error = error {
+                print("DEBUG: Failed to create user with error: ", error.localizedDescription)
+                return
+            }
+            else {
+                print("user created")
+            }
+//
+//            guard let profileImg = self.plusPhotoBtn.imageView?.image else { return }
+//            guard let uploadData = profileImg.jpegData(compressionQuality: 0.3) else { return }
+//
+//            let filename = NSUUID().uuidString
+//
+//            // UPDATE: - In order to get download URL must add filename to storage ref like this
+//            let storageRef = Storage.storage().reference().child("profile_images").child(filename)
+//
+//            storageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
+//
+//                // handle error
+//                if let error = error {
+//                    print("Failed to upload image to Firebase Storage with error", error.localizedDescription)
+//                    return
+//                }
+//
+//                // UPDATE: - Firebase 5 must now retrieve download url
+//                storageRef.downloadURL(completion: { (downloadURL, error) in
+//                    guard let profileImageUrl = downloadURL?.absoluteString else {
+//                        print("DEBUG: Profile image url is nil")
+//                        return
+//                    }
+//
+//                    // user id
+//                    guard let uid = authResult?.user.uid else { return }
+//                    guard let fcmToken = Messaging.messaging().fcmToken else { return }
+//
+//                    let dictionaryValues = ["name": fullName,
+//                                            "fcmToken": fcmToken,
+//                                            "username": username,
+//                                            "profileImageUrl": profileImageUrl]
+//
+//                    let values = [uid: dictionaryValues]
+//
+//                    // save user info to database
+//                    USER_REF.updateChildValues(values, withCompletionBlock: { (error, ref) in
+//
+//                        guard let mainTabVC = UIApplication.shared.keyWindow?.rootViewController as? MainTabVC else { return }
+//
+//                        // configure view controllers in maintabvc
+//                        mainTabVC.configureViewControllers()
+//                        mainTabVC.isInitialLoad = true
+//
+//                        // dismiss login controller
+//                        self.dismiss(animated: true, completion: nil)
+//                    })
+//                })
+//            })
+    }
+            
+        }
 
 
 }

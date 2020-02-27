@@ -95,5 +95,7 @@ class LoginVC: UIViewController {
         let signUpVC = SignupVC()
         navigationController?.pushViewController(signUpVC, animated: true)
     }
+    
+    
 
 }
