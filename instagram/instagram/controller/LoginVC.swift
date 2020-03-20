@@ -94,7 +94,7 @@ class LoginVC: UIViewController {
     // MARK: - Handlers
     
     @objc func handleShowSignUp() {
-        print("signup vc called")
+       
         let signUpVC = SignupVC()
         navigationController?.pushViewController(signUpVC, animated: true)
     }
@@ -133,20 +133,11 @@ class LoginVC: UIViewController {
                 return
             }
         
-       //     print("yes")
-         //  guard let mainTabVC = UIApplication.shared.keyWindow?.rootViewController as? MainTabVC else { return }
-       //        print("no")
-     // mainTabVC.configureViewControllers()
-//   self.dismiss(animated: true, completion: nil)
-//          let mainVC = MainTabVC()
-//            self.present(mainVC, animated: true,completion: nil)
-//        }
-//    }
     let navigationController = UINavigationController(rootViewController: MainTabVC())
 
     UIApplication.shared.windows.first?.rootViewController = navigationController
     UIApplication.shared.windows.first?.makeKeyAndVisible()
-
+    self.dismiss(animated: true, completion: nil)
 }
 }
 }

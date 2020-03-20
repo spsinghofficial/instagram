@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class MainTabVC: UITabBarController, UITabBarControllerDelegate {
 
@@ -17,6 +18,8 @@ class MainTabVC: UITabBarController, UITabBarControllerDelegate {
             
             // configure view controllers
             configureViewControllers()
+        // user validation
+        checkIfUserIsLoggedIn()
 
     }
     // MARK: - Handlers
@@ -58,6 +61,21 @@ class MainTabVC: UITabBarController, UITabBarControllerDelegate {
         return navController
     }
     
-
+    // MARK: - API
+    
+    func checkIfUserIsLoggedIn() {
+        if Auth.auth().currentUser == nil {
+            DispatchQueue.main.async {
+                let loginVC = LoginVC()
+                let navController = UINavigationController(rootViewController: loginVC)
+                
+                // UPDATE: iOS 13 presentation fix
+                navController.modalPresentationStyle = .fullScreen
+                
+                self.present(navController, animated: true, completion: nil)
+            }
+            return
+        }
+    }
 
 }
