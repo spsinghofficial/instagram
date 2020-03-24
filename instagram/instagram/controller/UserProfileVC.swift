@@ -63,15 +63,18 @@ class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayo
         
         // declare header
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerIdentifier, for: indexPath) as! UserProfileHeader
+           let currentUid = Auth.auth().currentUser?.uid
+            
+            Database.database().reference().child("users").child(currentUid!).observeSingleEvent(of: .value) { (snapshot) in
+                guard let dictionary = snapshot.value as? Dictionary<String, AnyObject> else { return }
+                let uid = snapshot.key
+                let user = User(uid: uid, dictionary: dictionary)
+              
+                self.navigationItem.title = user.username
+                self.collectionView?.reloadData()
+                header.user = user 
+            }
         
-        // set delegate
-       // header.delegate = self
-        
-        // set the user in header
-       // header.user = self.user
-            // navigationItem.title = user?.username
-        
-        // return header
         return header
     }
     

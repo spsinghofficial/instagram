@@ -227,17 +227,18 @@ class SignupVC: UIViewController, UIImagePickerControllerDelegate, UINavigationC
                     Database.database().reference().child("users")
                         .updateChildValues(values, withCompletionBlock: { (error, ref) in
 
-//                        guard let mainTabVC = UIApplication.shared.keyWindow?.rootViewController as? MainTabVC else { return }
-//
-//                        // configure view controllers in maintabvc
-//                        mainTabVC.configureViewControllers()
-//                        mainTabVC.isInitialLoad = true
-//
-//                        // dismiss login controller
-//                        self.dismiss(animated: true, completion: nil)
+                       // mainTabVC.isInitialLoad = true
+
+                        // dismiss login controller
+                        self.dismiss(animated: true, completion: nil)
                             if error != nil {
                                 print("error storing data\(error?.localizedDescription)")
                             }
+
+                            guard let mainTabVC = UIApplication.shared.keyWindow?.rootViewController as? MainTabVC else { return }
+
+                            // configure view controllers in maintabvc
+                            mainTabVC.configureViewControllers()
                     })
                 })
             })

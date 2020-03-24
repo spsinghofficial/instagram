@@ -10,6 +10,25 @@ import UIKit
 
 
 class UserProfileHeader: UICollectionViewCell {
+    var user: User? {
+        
+        didSet {
+            
+            // configure edit profile button
+          //  configureEditProfileFollowButton()
+            
+            // set user stats
+//            setUserStats(for: user)
+            
+            let fullName = user?.name
+            nameLabel.text = fullName
+            
+            guard let profileImageUrl = user?.profileImageUrl else { return }
+            
+            profileImageView.loadImage(with: profileImageUrl)
+        }
+    }
+    
     
     let profileImageView: UIImageView = {
         let iv = UIImageView()
@@ -22,7 +41,6 @@ class UserProfileHeader: UICollectionViewCell {
     let nameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 12)
-        label.text = "Surinder Sidhu"
         return label
     }()
     

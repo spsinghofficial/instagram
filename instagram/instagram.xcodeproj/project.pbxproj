@@ -112,11 +112,11 @@
 		5B71D9592400877600095D31 /* controller */ = {
 			isa = PBXGroup;
 			children = (
+				5B7BA03B242A8B9200F8D7DD /* Search */,
 				5B71D95C24008B1D00095D31 /* LoginVC.swift */,
 				5B6A55512401569200A19AD4 /* SignupVC.swift */,
 				5BC93CF52407FBEF00967F73 /* MainTabVC.swift */,
 				5BC93CF72407FC2800967F73 /* FeedVC.swift */,
-				5BC93CF92407FC5400967F73 /* SearchVC.swift */,
 				5BC93CFB2407FC7500967F73 /* UploadPostVC.swift */,
 				5BC93CFD2407FCC100967F73 /* NotificationVC.swift */,
 				5BC93CFF2407FCE600967F73 /* UserProfileVC.swift */,
@@ -146,6 +146,14 @@
 				5B71D95F240094EC00095D31 /* Extensions.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		5B7BA03B242A8B9200F8D7DD /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				5BC93CF92407FC5400967F73 /* SearchVC.swift */,
+			);
+			path = Search;
 			sourceTree = "<group>";
 		};
 		F4B68692EB21E6FD842E71D7 /* Frameworks */ = {
