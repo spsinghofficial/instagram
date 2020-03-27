@@ -18,6 +18,7 @@
 		5B71D95D24008B1D00095D31 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B71D95C24008B1D00095D31 /* LoginVC.swift */; };
 		5B71D960240094EC00095D31 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B71D95F240094EC00095D31 /* Extensions.swift */; };
 		5B7BA03A242A75AA00F8D7DD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BA039242A75AA00F8D7DD /* User.swift */; };
+		5B7BA03D242A965D00F8D7DD /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B7BA03C242A965D00F8D7DD /* SearchTableViewCell.swift */; };
 		5BC93CF62407FBEF00967F73 /* MainTabVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC93CF52407FBEF00967F73 /* MainTabVC.swift */; };
 		5BC93CF82407FC2800967F73 /* FeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC93CF72407FC2800967F73 /* FeedVC.swift */; };
 		5BC93CFA2407FC5400967F73 /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BC93CF92407FC5400967F73 /* SearchVC.swift */; };
@@ -44,6 +45,7 @@
 		5B71D95C24008B1D00095D31 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		5B71D95F240094EC00095D31 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		5B7BA039242A75AA00F8D7DD /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		5B7BA03C242A965D00F8D7DD /* SearchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
 		5BC93CF52407FBEF00967F73 /* MainTabVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabVC.swift; sourceTree = "<group>"; };
 		5BC93CF72407FC2800967F73 /* FeedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedVC.swift; sourceTree = "<group>"; };
 		5BC93CF92407FC5400967F73 /* SearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchVC.swift; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				5B1F48232424FF8700609939 /* UserProfileHeader.swift */,
+				5B7BA03C242A965D00F8D7DD /* SearchTableViewCell.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -293,6 +296,7 @@
 				5B71D9482400874B00095D31 /* SceneDelegate.swift in Sources */,
 				5B71D95D24008B1D00095D31 /* LoginVC.swift in Sources */,
 				5B71D960240094EC00095D31 /* Extensions.swift in Sources */,
+				5B7BA03D242A965D00F8D7DD /* SearchTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

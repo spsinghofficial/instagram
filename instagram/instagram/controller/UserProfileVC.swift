@@ -1,10 +1,8 @@
-//
 //  UserProfileVC.swift
 //  instagram
-//
 //  Created by surinder pal singh sidhu on 2020-02-27.
 //  Copyright © 2020 surinder. All rights reserved.
-//
+
 
 import UIKit
 import Firebase
@@ -14,7 +12,10 @@ private let reuseIdentifier = "Cell"
 private let headerIdentifier = "UserProfileHeader"
 
 class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayout {
-
+    
+ var user: User?
+    var userFromSearchVC: User?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -28,8 +29,6 @@ class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayo
         // Do any additional setup after loading the view.
         // background color
         self.collectionView?.backgroundColor = .white
-        fetchCurrentUserData()
-          navigationController?.navigationBar.isHidden = true
         self.navigationItem.title = "sidhu"
     }
  // MARK: - UICollectionViewFlowLayout
@@ -63,35 +62,40 @@ class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayo
         
         // declare header
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerIdentifier, for: indexPath) as! UserProfileHeader
-           let currentUid = Auth.auth().currentUser?.uid
-            
-            Database.database().reference().child("users").child(currentUid!).observeSingleEvent(of: .value) { (snapshot) in
-                guard let dictionary = snapshot.value as? Dictionary<String, AnyObject> else { return }
-                let uid = snapshot.key
-                let user = User(uid: uid, dictionary: dictionary)
-              
-                self.navigationItem.title = user.username
-                self.collectionView?.reloadData()
-                header.user = user 
+        // set delegate
+       
+        
+        // set the user in header
+        if let user = userFromSearchVC {
+            header.user = user
+            navigationItem.title = user.username
+        }
+        else {
+            fetchCurrentUserData()
+            header.user = user 
+        }
+
+        
+        // return header
+        return header
+        
             }
         
-        return header
-    }
+        
+    
     
     //MARK:
     func fetchCurrentUserData() {
       
-        guard let currentUid = Auth.auth().currentUser?.uid else { return }
-        
-        Database.database().reference().child("users").child(currentUid).child("username").observeSingleEvent(of: .value) { (snapshot) in
-            guard let dictionary = snapshot.value as? Dictionary<String, AnyObject> else { return }
-            let uid = snapshot.key
-           // let user = User(uid: uid, dictionary: dictionary)
-           // self.user = user
-            //self.navigationItem.title = user.username
-            print(snapshot.value)
-           
-            //self.collectionView?.reloadData()
-        }
+     guard let currentUid = Auth.auth().currentUser?.uid else { return }
+              
+              Database.database().reference().child("users").child(currentUid).observeSingleEvent(of: .value) { (snapshot) in
+                  guard let dictionary = snapshot.value as? Dictionary<String, AnyObject> else { return }
+                  let uid = snapshot.key
+                  let user = User(uid: uid, dictionary: dictionary)
+                  self.user = user
+                  self.navigationItem.title = user.username
+                  self.collectionView?.reloadData()
+              }
     }
 }
