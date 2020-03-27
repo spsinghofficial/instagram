@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		5B1F48242424FF8700609939 /* UserProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1F48232424FF8700609939 /* UserProfileHeader.swift */; };
+		5B4F19CE242D95580010C08B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4F19CD242D95580010C08B /* Constants.swift */; };
+		5B4F19D0242D956A0010C08B /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B4F19CF242D956A0010C08B /* Protocols.swift */; };
 		5B5176012405FC26009CDAC2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5B5176002405FC26009CDAC2 /* GoogleService-Info.plist */; };
 		5B6A55522401569200A19AD4 /* SignupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6A55512401569200A19AD4 /* SignupVC.swift */; };
 		5B71D9462400874B00095D31 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B71D9452400874B00095D31 /* AppDelegate.swift */; };
@@ -33,6 +35,8 @@
 		3BA4DFFA5A39A4F4345D83F2 /* Pods-instagram.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-instagram.release.xcconfig"; path = "Target Support Files/Pods-instagram/Pods-instagram.release.xcconfig"; sourceTree = "<group>"; };
 		480E1573A1AE50303D92E22D /* Pods_instagram.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_instagram.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B1F48232424FF8700609939 /* UserProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeader.swift; sourceTree = "<group>"; };
+		5B4F19CD242D95580010C08B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		5B4F19CF242D956A0010C08B /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		5B5176002405FC26009CDAC2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5B6A55512401569200A19AD4 /* SignupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupVC.swift; sourceTree = "<group>"; };
 		5B71D9422400874B00095D31 /* instagram.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = instagram.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -75,6 +79,23 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		5B4F19D1242D980B0010C08B /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				5B6A55512401569200A19AD4 /* SignupVC.swift */,
+				5B71D95C24008B1D00095D31 /* LoginVC.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		5B4F19D2242D98300010C08B /* UserProfile */ = {
+			isa = PBXGroup;
+			children = (
+				5BC93CFF2407FCE600967F73 /* UserProfileVC.swift */,
+			);
+			path = UserProfile;
+			sourceTree = "<group>";
+		};
 		5B71D9392400874B00095D31 = {
 			isa = PBXGroup;
 			children = (
@@ -114,14 +135,13 @@
 		5B71D9592400877600095D31 /* controller */ = {
 			isa = PBXGroup;
 			children = (
+				5B4F19D2242D98300010C08B /* UserProfile */,
+				5B4F19D1242D980B0010C08B /* Login */,
 				5B7BA03B242A8B9200F8D7DD /* Search */,
-				5B71D95C24008B1D00095D31 /* LoginVC.swift */,
-				5B6A55512401569200A19AD4 /* SignupVC.swift */,
 				5BC93CF52407FBEF00967F73 /* MainTabVC.swift */,
 				5BC93CF72407FC2800967F73 /* FeedVC.swift */,
 				5BC93CFB2407FC7500967F73 /* UploadPostVC.swift */,
 				5BC93CFD2407FCC100967F73 /* NotificationVC.swift */,
-				5BC93CFF2407FCE600967F73 /* UserProfileVC.swift */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -147,6 +167,8 @@
 			isa = PBXGroup;
 			children = (
 				5B71D95F240094EC00095D31 /* Extensions.swift */,
+				5B4F19CD242D95580010C08B /* Constants.swift */,
+				5B4F19CF242D956A0010C08B /* Protocols.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -288,6 +310,7 @@
 				5BC93CFE2407FCC100967F73 /* NotificationVC.swift in Sources */,
 				5BC93CFA2407FC5400967F73 /* SearchVC.swift in Sources */,
 				5B1F48242424FF8700609939 /* UserProfileHeader.swift in Sources */,
+				5B4F19CE242D95580010C08B /* Constants.swift in Sources */,
 				5BC93D002407FCE600967F73 /* UserProfileVC.swift in Sources */,
 				5B71D9462400874B00095D31 /* AppDelegate.swift in Sources */,
 				5BC93CF82407FC2800967F73 /* FeedVC.swift in Sources */,
@@ -297,6 +320,7 @@
 				5B71D95D24008B1D00095D31 /* LoginVC.swift in Sources */,
 				5B71D960240094EC00095D31 /* Extensions.swift in Sources */,
 				5B7BA03D242A965D00F8D7DD /* SearchTableViewCell.swift in Sources */,
+				5B4F19D0242D956A0010C08B /* Protocols.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

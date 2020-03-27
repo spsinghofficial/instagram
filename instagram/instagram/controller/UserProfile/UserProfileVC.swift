@@ -11,7 +11,19 @@ private let reuseIdentifier = "Cell"
 
 private let headerIdentifier = "UserProfileHeader"
 
-class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayout {
+class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayout ,UserProfileHeaderDelegate {
+    func setUserStats(for header: UserProfileHeader) {
+        
+    }
+    
+    func handleFollowersTapped(for header: UserProfileHeader) {
+        
+    }
+    
+    func handleFollowingTapped(for header: UserProfileHeader) {
+        
+    }
+    
     
  var user: User?
     var userFromSearchVC: User?
@@ -63,7 +75,7 @@ class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayo
         // declare header
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerIdentifier, for: indexPath) as! UserProfileHeader
         // set delegate
-       
+        header.delegate = self 
         
         // set the user in header
         if let user = userFromSearchVC {
@@ -97,5 +109,29 @@ class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayo
                   self.navigationItem.title = user.username
                   self.collectionView?.reloadData()
               }
+    }
+    
+    func handleEditFollowTapped(for header: UserProfileHeader) {
+          print("edit follow button called")
+        guard let user = header.user else { return }
+        
+        if header.editProfileFollowButton.titleLabel?.text == "Edit Profile" {
+            
+//            let editProfileController = EditProfileController()
+//            editProfileController.user = user
+//            editProfileController.userProfileController = self
+//            let navigationController = UINavigationController(rootViewController: editProfileController)
+//            present(navigationController, animated: true, completion: nil)
+            
+        } else {
+            // handles user follow/unfollow
+            if header.editProfileFollowButton.titleLabel?.text == "Follow" {
+                header.editProfileFollowButton.setTitle("Following", for: .normal)
+                user.follow()
+            } else {
+                header.editProfileFollowButton.setTitle("Follow", for: .normal)
+                user.unfollow()
+            }
+        }
     }
 }
