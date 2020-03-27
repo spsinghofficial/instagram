@@ -19,7 +19,7 @@ class UserProfileHeader: UICollectionViewCell {
           configureEditProfileFollowButton()
             
             // set user stats
-//            setUserStats(for: user)
+            setUserStats(for: user)
             
             let fullName = user?.name
             nameLabel.text = fullName
@@ -65,10 +65,10 @@ class UserProfileHeader: UICollectionViewCell {
         label.attributedText = attributedText
         
         // add gesture recognizer
-       // let followTap = UITapGestureRecognizer(target: self, action: #selector(handleFollowersTapped))
-       // followTap.numberOfTapsRequired = 1
+       let followTap = UITapGestureRecognizer(target: self, action: #selector(handleFollowersTapped))
+        followTap.numberOfTapsRequired = 1
         label.isUserInteractionEnabled = true
-       // label.addGestureRecognizer(followTap)
+       label.addGestureRecognizer(followTap)
         
         return label
     }()
@@ -83,10 +83,10 @@ class UserProfileHeader: UICollectionViewCell {
         label.attributedText = attributedText
         
         // add gesture recognizer
-       // let followTap = UITapGestureRecognizer(target: self, action: #selector(handleFollowingTapped))
-        //followTap.numberOfTapsRequired = 1
+        let followTap = UITapGestureRecognizer(target: self, action: #selector(handleFollowingTapped))
+        followTap.numberOfTapsRequired = 1
         label.isUserInteractionEnabled = true
-       // label.addGestureRecognizer(followTap)
+       label.addGestureRecognizer(followTap)
         return label
     }()
     
@@ -157,7 +157,6 @@ class UserProfileHeader: UICollectionViewCell {
     }
 
     @objc func handleEditProfileFollow() {
-        print("my method called")
         delegate?.handleEditFollowTapped(for: self)
     }
     

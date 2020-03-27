@@ -39,9 +39,9 @@ protocol MessageInputAccesoryViewDelegate {
     func handleSelectImage()
 }
 
-//protocol FollowCellDelegate {
-//    func handleFollowTapped(for cell: FollowLikeCell)
-//}
+protocol FollowCellDelegate {
+    func handleFollowTapped(for cell: FollowLikeCell)
+}
 //
 //protocol ChatCellDelegate {
 //    func handlePlayVideo(for cell: ChatCell)

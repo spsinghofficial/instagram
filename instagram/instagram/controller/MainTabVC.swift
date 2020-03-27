@@ -21,6 +21,7 @@ class MainTabVC: UITabBarController, UITabBarControllerDelegate {
             configureViewControllers()
         // user validation
         checkIfUserIsLoggedIn()
+        navigationController?.navigationBar.isHidden = true
 
     }
     // MARK: - Handlers

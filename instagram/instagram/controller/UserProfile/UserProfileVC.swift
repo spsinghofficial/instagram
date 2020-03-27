@@ -12,18 +12,7 @@ private let reuseIdentifier = "Cell"
 private let headerIdentifier = "UserProfileHeader"
 
 class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayout ,UserProfileHeaderDelegate {
-    func setUserStats(for header: UserProfileHeader) {
-        
-    }
-    
-    func handleFollowersTapped(for header: UserProfileHeader) {
-        
-    }
-    
-    func handleFollowingTapped(for header: UserProfileHeader) {
-        
-    }
-    
+
     
  var user: User?
     var userFromSearchVC: User?
@@ -134,4 +123,65 @@ class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayo
             }
         }
     }
+    
+    func setUserStats(for header: UserProfileHeader) {
+        guard let uid = header.user?.uid else { return }
+               
+               var numberOfFollwers: Int!
+               var numberOfFollowing: Int!
+               
+               // get number of followers
+               USER_FOLLOWER_REF.child(uid).observe(.value) { (snapshot) in
+                   if let snapshot = snapshot.value as? Dictionary<String, AnyObject> {
+                       numberOfFollwers = snapshot.count
+                   } else {
+                       numberOfFollwers = 0
+                   }
+                   
+                   let attributedText = NSMutableAttributedString(string: "\(numberOfFollwers!)\n", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)])
+                   attributedText.append(NSAttributedString(string: "followers", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.lightGray]))
+                   
+                   header.followersLabel.attributedText = attributedText
+               }
+               
+               // get number of following
+               USER_FOLLOWING_REF.child(uid).observe(.value) { (snapshot) in
+                   if let snapshot = snapshot.value as? Dictionary<String, AnyObject> {
+                       numberOfFollowing = snapshot.count
+                   } else {
+                       numberOfFollowing = 0
+                   }
+                   
+                   let attributedText = NSMutableAttributedString(string: "\(numberOfFollowing!)\n", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)])
+                   attributedText.append(NSAttributedString(string: "following", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.lightGray]))
+                   
+                   header.followingLabel.attributedText = attributedText
+               }
+               
+               // get number of posts
+               USER_POSTS_REF.child(uid).observeSingleEvent(of: .value) { (snapshot) in
+                   guard let snapshot = snapshot.children.allObjects as? [DataSnapshot] else { return }
+                   let postCount = snapshot.count
+                   
+                   let attributedText = NSMutableAttributedString(string: "\(postCount)\n", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 14)])
+                   attributedText.append(NSAttributedString(string: "posts", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14), NSAttributedString.Key.foregroundColor: UIColor.lightGray]))
+                   
+                   header.postsLabel.attributedText = attributedText
+               }
+    }
+    
+    func handleFollowersTapped(for header: UserProfileHeader) {
+        let followVC = FollowLikeVC()
+        //followVC.viewingMode = FollowLikeVC.ViewingMode(index: 1)
+      followVC.uid = user?.uid
+        navigationController?.pushViewController(followVC, animated: true)
+    }
+    
+    func handleFollowingTapped(for header: UserProfileHeader) {
+        let followVC = FollowLikeVC()
+      //  followVC.viewingMode = FollowLikeVC.ViewingMode(index: 0)
+       followVC.uid = user?.uid
+        navigationController?.pushViewController(followVC, animated: true)
+    }
+    
 }
