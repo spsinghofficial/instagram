@@ -99,5 +99,24 @@ class MainTabVC: UITabBarController, UITabBarControllerDelegate {
             return
         }
     }
+    
+    // MARK: - UITabBar
+     
+     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+         let index = viewControllers?.firstIndex(of: viewController)
+         
+         if index == 2 {
+             let selectImageVC = SelectImageVC(collectionViewLayout: UICollectionViewFlowLayout())
+             let navController = UINavigationController(rootViewController: selectImageVC)
+             navController.navigationBar.tintColor = .black
+             present(navController, animated: true, completion: nil)
+             return false
+             
+         } else if index == 3 {
+             //dot.isHidden = true
+             return true
+         }
+         return true
+     }
 
 }
