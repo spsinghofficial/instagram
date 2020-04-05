@@ -7,16 +7,19 @@
 //
 
 import UIKit
+import Firebase
 private let reuseIdentifer = "FollowCell"
 class FollowLikeVC: UITableViewController, FollowCellDelegate {
 
     
     var uid: String?
     var users = [User]()
+    var isFollowing = false
+    var isFollower = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("follow vc called")
         // register cell class
         tableView.register(FollowLikeCell.self, forCellReuseIdentifier: reuseIdentifer)
         
@@ -106,6 +109,33 @@ class FollowLikeVC: UITableViewController, FollowCellDelegate {
 //        }
 //    }
     func  fetchUsers(){
+      
+        var ref: DatabaseReference!
+        guard let uid = self.uid else {return}
+        print("user id 1 \(uid)")
+        print("follower tab\(isFollower)")
+          print("following tab\(isFollowing)")
+        if isFollower{
+            ref = USER_FOLLOWER_REF
+        }
+        else{
+            ref = USER_FOLLOWING_REF
+        }
+       ref.child(uid).observe(.childAdded) { (snapshot) in
+        let userID = snapshot.key
+       
+        USER_REF.child(userID).observeSingleEvent(of: .value, with: { (snapshot) in
+                guard let dictionary = snapshot.value as? Dictionary<String,AnyObject> else { return }
+                                      let user = User(uid: userID, dictionary: dictionary)
+                                      self.users.append(user)
+                                      self.tableView.reloadData()
+        })
         
+        
+        }
+                  print("LIST OF USERS ")
+                        print(users)
     }
+      
 }
+

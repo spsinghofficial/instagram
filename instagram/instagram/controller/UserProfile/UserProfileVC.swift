@@ -15,7 +15,7 @@ class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayo
 
     
  var user: User?
-    var userFromSearchVC: User?
+    //var userFromSearchVC: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +31,9 @@ class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayo
         // background color
         self.collectionView?.backgroundColor = .white
         self.navigationItem.title = "sidhu"
+        if self.user == nil {
+            fetchCurrentUserData()
+        }
     }
  // MARK: - UICollectionViewFlowLayout
     
@@ -67,21 +70,14 @@ class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayo
         header.delegate = self 
         
         // set the user in header
-        if let user = userFromSearchVC {
-            header.user = user
-            navigationItem.title = user.username
-        }
-        else {
-            fetchCurrentUserData()
-            header.user = user 
-        }
+        header.user = self.user
 
         
         // return header
         return header
         
             }
-        
+   
         
     
     
@@ -174,6 +170,8 @@ class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayo
         let followVC = FollowLikeVC()
         //followVC.viewingMode = FollowLikeVC.ViewingMode(index: 1)
       followVC.uid = user?.uid
+        followVC.isFollower = true
+        followVC.isFollowing = false
         navigationController?.pushViewController(followVC, animated: true)
     }
     
@@ -181,6 +179,8 @@ class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayo
         let followVC = FollowLikeVC()
       //  followVC.viewingMode = FollowLikeVC.ViewingMode(index: 0)
        followVC.uid = user?.uid
+        followVC.isFollowing = true
+        followVC.isFollower = false
         navigationController?.pushViewController(followVC, animated: true)
     }
     
