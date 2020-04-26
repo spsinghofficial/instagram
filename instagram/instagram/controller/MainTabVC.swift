@@ -15,7 +15,7 @@ class MainTabVC: UITabBarController, UITabBarControllerDelegate {
         super.viewDidLoad()
         // delegate
             self.delegate = self
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
+       // self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
             
             // configure view controllers
             configureViewControllers()
@@ -49,27 +49,27 @@ class MainTabVC: UITabBarController, UITabBarControllerDelegate {
         // tab bar tint color
         tabBar.tintColor = .black
     }
-    @objc func handleLogout() {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        alertController.addAction(UIAlertAction(title: "Log Out", style: .destructive, handler: { (_) in
-            
-            do {
-                try Auth.auth().signOut()
-                let loginVC = LoginVC()
-                let navController = UINavigationController(rootViewController: loginVC)
-                
-                // UPDATE: - iOS 13 presentation fix
-                navController.modalPresentationStyle = .fullScreen
-                
-                self.present(navController, animated: true, completion: nil)
-            } catch {
-                print("Failed to sign out")
-            }
-        }))
-        
-        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        present(alertController, animated: true, completion: nil)
-    }
+//    @objc func handleLogout() {
+//        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+//        alertController.addAction(UIAlertAction(title: "Log Out", style: .destructive, handler: { (_) in
+//
+//            do {
+//                try Auth.auth().signOut()
+//                let loginVC = LoginVC()
+//                let navController = UINavigationController(rootViewController: loginVC)
+//
+//                // UPDATE: - iOS 13 presentation fix
+//                navController.modalPresentationStyle = .fullScreen
+//
+//                self.present(navController, animated: true, completion: nil)
+//            } catch {
+//                print("Failed to sign out")
+//            }
+//        }))
+//
+//        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+//        present(alertController, animated: true, completion: nil)
+//    }
     /// construct navigation controllers
     func constructNavController(unselectedImage: UIImage, selectedImage: UIImage, rootViewController: UIViewController = UIViewController()) -> UINavigationController {
         

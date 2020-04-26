@@ -66,7 +66,7 @@ class SelectImageVC: UICollectionViewController, UICollectionViewDelegateFlowLay
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return 5
+        return images.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -118,10 +118,10 @@ class SelectImageVC: UICollectionViewController, UICollectionViewDelegateFlowLay
     }
     
     @objc func handleNext() {
-//        let uploadPostVC = UploadPostVC()
-//        uploadPostVC.selectedImage = header?.photoImageView.image
-//        uploadPostVC.uploadAction = UploadPostVC.UploadAction(index: 0)
-//        navigationController?.pushViewController(uploadPostVC, animated: true)
+        let uploadPostVC = UploadPostVC()
+        uploadPostVC.selectedImage = header?.photoImageView.image
+        //uploadPostVC.uploadAction = UploadPostVC.UploadAction(index: 0)
+        navigationController?.pushViewController(uploadPostVC, animated: true)
     }
     
     func configureNavigationButtons() {
@@ -188,5 +188,6 @@ class SelectImageVC: UICollectionViewController, UICollectionViewDelegateFlowLay
                 })
             })
         }
+        print(images)
     }
 }

@@ -15,6 +15,7 @@ class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayo
 
     
  var user: User?
+    var posts =  [Post]()
     //var userFromSearchVC: User?
     
     override func viewDidLoad() {
@@ -25,6 +26,7 @@ class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayo
 
         // Register cell classes
         self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+         self.collectionView!.register(UserPostCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         
         self.collectionView!.register(UserProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
         // Do any additional setup after loading the view.
@@ -34,9 +36,22 @@ class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayo
         if self.user == nil {
             fetchCurrentUserData()
         }
+        fetchPosts()
     }
  // MARK: - UICollectionViewFlowLayout
+   
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 1
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = (view.frame.width - 2) / 3
+        return CGSize(width: width, height: width)
+    }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: view.frame.width, height: 200)
     }
@@ -51,14 +66,16 @@ class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayo
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return 0
+        return posts.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
+        //let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
     
         // Configure the cell
-    
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! UserPostCell
+      
+          cell.post = posts[indexPath.item]
         return cell
     }
 
@@ -182,6 +199,30 @@ class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayo
         followVC.isFollowing = true
         followVC.isFollower = false
         navigationController?.pushViewController(followVC, animated: true)
+    }
+    
+    func fetchPosts(){
+        let uid: String!
+        if let user = self.user{
+            uid = user.uid
+        }
+        else {
+            uid = Auth.auth().currentUser?.uid
+        }
+        
+        USER_POSTS_REF.child(uid).observe(.childAdded) { (snapshot) in
+            let postID = snapshot.key
+            POSTS_REF.child(postID).observeSingleEvent(of: .value) { (snapshot) in
+                guard let dictioanary = snapshot.value as? Dictionary<String,AnyObject> else { return}
+                let post = Post(postId: postID,  dictionary: dictioanary)
+                self.posts.append(post)
+                self.posts.sort { (post1, post2) -> Bool in
+                    return post1.creationDate > post2.creationDate
+                }
+                self.collectionView.reloadData()
+                
+            }
+        }
     }
     
 }
