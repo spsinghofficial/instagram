@@ -96,6 +96,17 @@ class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayo
             }
    
         
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let feedVC = FeedVC(collectionViewLayout: UICollectionViewFlowLayout())
+        
+        feedVC.viewSinglePost = true
+        feedVC.userProfileController = self
+        
+        feedVC.post = posts[indexPath.item]
+        
+        navigationController?.pushViewController(feedVC, animated: true)
+    }
     
     
     //MARK:
@@ -214,12 +225,15 @@ class UserProfileVC: UICollectionViewController,UICollectionViewDelegateFlowLayo
             let postID = snapshot.key
             POSTS_REF.child(postID).observeSingleEvent(of: .value) { (snapshot) in
                 guard let dictioanary = snapshot.value as? Dictionary<String,AnyObject> else { return}
-                let post = Post(postId: postID,  dictionary: dictioanary)
-                self.posts.append(post)
-                self.posts.sort { (post1, post2) -> Bool in
-                    return post1.creationDate > post2.creationDate
+                Database.fetchUser(with: uid) { (user) in
+                         let post = Post(postId: postID,user: user,  dictionary: dictioanary)
+                               self.posts.append(post)
+                               self.posts.sort { (post1, post2) -> Bool in
+                                   return post1.creationDate > post2.creationDate
+                               }
+                               self.collectionView.reloadData()
                 }
-                self.collectionView.reloadData()
+           
                 
             }
         }

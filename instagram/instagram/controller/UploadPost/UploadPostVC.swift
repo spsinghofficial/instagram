@@ -125,7 +125,7 @@ class UploadPostVC: UIViewController, UITextViewDelegate {
                     userPostsRef.updateChildValues([postKey: 1])
                     
                     // update user-feed structure
-                   // self.updateUserFeeds(with: postKey)
+                    self.updateUserFeeds(with: postKey)
                     
                     // upload hashtag to server
                     if caption.contains("#") {
@@ -145,4 +145,16 @@ class UploadPostVC: UIViewController, UITextViewDelegate {
             })
         }
     }
+    func updateUserFeeds(with postId: String) {
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        let values = [postId: 1]
+        
+        USER_FOLLOWER_REF.child(currentUid).observe(.childAdded) { (snapshot) in
+            let followerUid = snapshot.key
+            USER_FEED_REF.child(followerUid).updateChildValues(values)
+        }
+        
+        USER_FEED_REF.child(currentUid).updateChildValues(values)
+    }
+    
 }

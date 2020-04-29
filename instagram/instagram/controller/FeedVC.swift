@@ -11,7 +11,14 @@ import Firebase
 
 private let reuseIdentifier = "Cell"
 
-class FeedVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class FeedVC: UICollectionViewController, UICollectionViewDelegateFlowLayout, FeedCellDelegate {
+
+    
+    var posts = [Post]()
+    var viewSinglePost = false
+    var post: Post?
+    var currentKey: String?
+    var userProfileController: UserProfileVC?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +33,10 @@ class FeedVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         // Do any additional setup after loading the view.
           collectionView?.backgroundColor = .white
           configureNavigationBar()
+            // fetch posts
+            if !viewSinglePost {
+                fetchPosts()
+            }
     }
 
     /*
@@ -59,7 +70,11 @@ class FeedVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return 5
+          if viewSinglePost {
+                  return 1
+              } else {
+                  return posts.count
+              }
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -67,6 +82,16 @@ class FeedVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     
         // Configure the cell
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! FeedCell
+          cell.delegate = self
+        if viewSinglePost {
+                 if let post = self.post {
+                     cell.post = post
+                 }
+             } else {
+                 cell.post = posts[indexPath.item]
+             }
+     
+      
         return cell
     }
 
@@ -101,12 +126,12 @@ class FeedVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     }
     */
     func configureNavigationBar() {
+      if !viewSinglePost {
+          self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
+          self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "send2"), style: .plain, target: self, action: #selector(handleShowMessages))
+      }
       
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "send2"), style: .plain, target: self, action: #selector(handleShowMessages))
-        
-        
-        self.navigationItem.title = "Feed"
+      self.navigationItem.title = "Feed"
     }
     
     @objc func handleShowMessages() {
@@ -137,4 +162,89 @@ class FeedVC: UICollectionViewController, UICollectionViewDelegateFlowLayout {
         present(alertController, animated: true, completion: nil)
     }
     
+    func fetchPosts(){
+            guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        
+//        if currentKey == nil {
+//            USER_FEED_REF.child(currentUid).queryLimited(toLast: 5).observeSingleEvent(of: .value, with: { (snapshot) in
+//                self.collectionView?.refreshControl?.endRefreshing()
+//
+//                guard let first = snapshot.children.allObjects.first as? DataSnapshot else { return }
+//                guard let allObjects = snapshot.children.allObjects as? [DataSnapshot] else { return }
+//
+//                allObjects.forEach({ (snapshot) in
+//                    let postId = snapshot.key
+//                    self.fetchPost(withPostId: postId)
+//                })
+//                self.currentKey = first.key
+//            })
+//        } else {
+//            USER_FEED_REF.child(currentUid).queryOrderedByKey().queryEnding(atValue: self.currentKey).queryLimited(toLast: 6).observeSingleEvent(of: .value, with: { (snapshot) in
+//
+//                guard let first = snapshot.children.allObjects.first as? DataSnapshot else { return }
+//                guard let allObjects = snapshot.children.allObjects as? [DataSnapshot] else { return }
+//
+//                allObjects.forEach({ (snapshot) in
+//                    let postId = snapshot.key
+//                    if postId != self.currentKey {
+//                        self.fetchPost(withPostId: postId)
+//                    }
+//                })
+//                self.currentKey = first.key
+//            })
+//        }
+        USER_FEED_REF.child(currentUid).observe(.childAdded) { (snapshot) in
+               let postid = snapshot.key
+               Database.fetchPost(with: postid) { (post) in
+                   self.posts.append(post)
+                   self.posts.sort { (post1, post2) -> Bool in
+                       return post1.creationDate > post2.creationDate
+                   }
+                   self.collectionView.reloadData()
+               }
+           }
+    }
+    func fetchPost(withPostId postId: String) {
+        Database.fetchPost(with: postId) { (post) in
+            self.posts.append(post)
+            
+            self.posts.sort(by: { (post1, post2) -> Bool in
+                return post1.creationDate > post2.creationDate
+            })
+            self.collectionView?.reloadData()
+        }
+    }
+    
+    // MARK: HANDLERS
+    func handleUsernameTapped(for cell: FeedCell) {
+        print("username tapped")
+         guard let user = cell.post?.user else { return }
+        let userProfileController = UserProfileVC(collectionViewLayout: UICollectionViewFlowLayout())
+        userProfileController.user = user
+        self.navigationController?.pushViewController(userProfileController, animated: true)
+    }
+    
+    func handleOptionsTapped(for cell: FeedCell) {
+           print("option tapped")
+    }
+    
+    func handleLikeTapped(for cell: FeedCell, isDoubleTap: Bool) {
+           print("like tapped")
+    }
+    
+    func handleCommentTapped(for cell: FeedCell) {
+           print("comment tapped")
+    }
+    
+    func handleConfigureLikeButton(for cell: FeedCell) {
+           print("configure like tapped")
+    }
+    
+    func handleShowLikes(for cell: FeedCell) {
+           print("showlikes tapped")
+    }
+    
+    func configureCommentIndicatorView(for cell: FeedCell) {
+           print("comment indicator tapped")
+    }
 }

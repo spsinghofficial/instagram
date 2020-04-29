@@ -8,9 +8,28 @@
 
 import UIKit
 import ActiveLabel
+import Firebase
 class FeedCell: UICollectionViewCell {
-     var stackView: UIStackView!
-    
+    var delegate: FeedCellDelegate?
+    var stackView: UIStackView!
+
+    var post: Post? {
+        didSet {
+            guard let ownerUid = post?.ownerUid else { return }
+            guard let imageUrl = post?.imageUrl else { return }
+            guard let likes = post?.likes else { return }
+            Database.fetchUser(with: ownerUid) { (user) in
+                self.profileImageView.loadImage(with: user.profileImageUrl)
+                self.usernameButton.setTitle(user.username, for: .normal)
+                //self.configurePostCaption(user: user)
+            }
+            postImageView.loadImage(with: imageUrl)
+            
+            likesLabel.text = "\(likes) likes"
+           // configureLikeButton()
+           // configureCommentIndicatorView()
+        }
+    }
     let profileImageView: CustomImageView = {
         let iv = CustomImageView()
         iv.contentMode = .scaleAspectFill
@@ -25,7 +44,7 @@ class FeedCell: UICollectionViewCell {
         button.setTitle("Username", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
-       // button.addTarget(self, action: #selector(handleUsernameTapped) , for: .touchUpInside)
+       button.addTarget(self, action: #selector(handleUsernameTapped) , for: .touchUpInside)
         return button
     }()
     
@@ -34,7 +53,7 @@ class FeedCell: UICollectionViewCell {
         button.setTitle("•••", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
-       // button.addTarget(self, action: #selector(handleOptionsTapped) , for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleOptionsTapped) , for: .touchUpInside)
         return button
     }()
     
@@ -44,10 +63,10 @@ class FeedCell: UICollectionViewCell {
         iv.clipsToBounds = true
         iv.backgroundColor = .lightGray
         
-       // let likeTap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTapToLike))
-//        likeTap.numberOfTapsRequired = 2
-//        iv.isUserInteractionEnabled = true
-//        iv.addGestureRecognizer(likeTap)
+        let likeTap = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTapToLike))
+        likeTap.numberOfTapsRequired = 2
+        iv.isUserInteractionEnabled = true
+        iv.addGestureRecognizer(likeTap)
         
         return iv
     }()
@@ -56,7 +75,7 @@ class FeedCell: UICollectionViewCell {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "like_unselected"), for: .normal)
         button.tintColor = .black
-       // button.addTarget(self, action: #selector(handleLikeTapped) , for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleLikeTapped) , for: .touchUpInside)
         return button
     }()
     
@@ -64,7 +83,7 @@ class FeedCell: UICollectionViewCell {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "comment"), for: .normal)
         button.tintColor = .black
-      //  button.addTarget(self, action: #selector(handleCommentTapped) , for: .touchUpInside)
+       button.addTarget(self, action: #selector(handleCommentTapped) , for: .touchUpInside)
         return button
     }()
     
@@ -88,10 +107,10 @@ class FeedCell: UICollectionViewCell {
         label.text = "3 likes"
         
         // add gesture recognizer to label
-        //let likeTap = UITapGestureRecognizer(target: self, action: #selector(handleShowLikes))
-       // likeTap.numberOfTapsRequired = 1
-        //label.isUserInteractionEnabled = true
-        //label.addGestureRecognizer(likeTap)
+        let likeTap = UITapGestureRecognizer(target: self, action: #selector(handleShowLikes))
+        likeTap.numberOfTapsRequired = 1
+        label.isUserInteractionEnabled = true
+        label.addGestureRecognizer(likeTap)
         
         return label
     }()
@@ -163,5 +182,31 @@ class FeedCell: UICollectionViewCell {
                 
         addSubview(savePostButton)
         savePostButton.anchor(top: postImageView.bottomAnchor, left: nil, bottom: nil, right: rightAnchor, paddingTop: 12, paddingLeft: 0, paddingBottom: 0, paddingRight: 8, width: 20, height: 24)
+    }
+    
+    // MARK: - Handlers
+    
+    @objc func handleUsernameTapped() {
+        delegate?.handleUsernameTapped(for: self)
+    }
+    
+    @objc func handleOptionsTapped() {
+        delegate?.handleOptionsTapped(for: self)
+    }
+    
+    @objc func handleLikeTapped() {
+        delegate?.handleLikeTapped(for: self, isDoubleTap: false)
+    }
+    
+    @objc func handleCommentTapped() {
+        delegate?.handleCommentTapped(for: self)
+    }
+    
+    @objc func handleShowLikes() {
+        delegate?.handleShowLikes(for: self)
+    }
+    
+    @objc func handleDoubleTapToLike() {
+        delegate?.handleLikeTapped(for: self, isDoubleTap: true)
     }
 }

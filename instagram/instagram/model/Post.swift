@@ -15,13 +15,13 @@ import Firebase
         var ownerUid: String!
         var creationDate: Date!
         var postId: String!
-       // var user: User?
+       var user: User?
         //var didLike = false
 
-init(postId: String!, dictionary: Dictionary<String, AnyObject>) {
+        init(postId: String!,user:User, dictionary: Dictionary<String, AnyObject>) {
     
     self.postId = postId
-    
+            self.user = user
 
     
     if let caption = dictionary["caption"] as? String {
